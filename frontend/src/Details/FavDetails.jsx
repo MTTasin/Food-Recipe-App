@@ -3,37 +3,39 @@ import { useState, useContext, useEffect } from "react";
 import { RecipeContext } from "../Context/Context";
 import useFetch from "../useFetch";
 import Loader from "../Components/Loader";
-import { MdOutlineStarPurple500 } from "react-icons/md";
-import { MdDoneOutline } from "react-icons/md";
+import { MdOutlineRemoveDone } from "react-icons/md";
 
-export default function Details() {
+export default function FavDetails() {
   const [recipeDetailsData, setrecipeDetailsData] = useState([]);
   const [fav, setFav] = useState([]);
   const params = useParams();
 
-  const [isfavorite, setIsFavorite] = useState(false);
+  const [isfavorite, setIsFavorite] = useState(true);
 
-  const POSTLink = `http://127.0.0.1:8000/favorites/`;
+  const POSTLink = `http://127.0.0.1:8000/favorites/${params.id}/`;
 
   function handleClick() {
+    // on handleclick remove the data from the database
     const data = JSON.stringify(recipeDetailsData);
     fetch(POSTLink, {
-      method: "POST",
+      method: "DELETE",
       headers: {
         "Content-Type": "application/json",
       },
       body: data,
     })
       .then((response) => response.json())
-      .catch((error) => console.error(error));
-
-    setIsFavorite(true);
+      .catch((error) => {
+        console.error(error);
+    })
+    setIsFavorite(false);
   }
 
-  const { response: favResponse, error: favError, loading: favLoading } =
-    useFetch(`http://127.0.0.1:8000/favorites/`);
-
-
+  const {
+    response: favResponse,
+    error: favError,
+    loading: favLoading,
+  } = useFetch(`http://127.0.0.1:8000/favorites/`);
 
   useEffect(() => {
     if (favResponse) {
@@ -46,7 +48,7 @@ export default function Details() {
   }, [favResponse]);
 
   const { response, error, loading } = useFetch(
-    `http://127.0.0.1:8000/recipes/${params.id}`
+    `http://127.0.0.1:8000/favorites/${params.id}`
   );
 
   useEffect(() => {
@@ -98,22 +100,18 @@ export default function Details() {
           <p className="text-black font-bold mt-2">
             Cook Time: <span className="font-normal">{cookTimeMinutes}</span>
           </p>
-          <div
-            className="btn btn-primary mt-5 flex justify-center"
-            onClick={handleClick}
-          >
-            {isfavorite ? (
+
+          {isfavorite ? (
+            <div
+              className="btn btn-error mt-5 flex justify-center"
+              onClick={handleClick}
+            >
               <span className="flex">
-                <MdDoneOutline className="text-xl mb-2" />
-                Added to Favourites
+                <MdOutlineRemoveDone className="text-xl mb-2" />
+                Remove from Favourites
               </span>
-            ) : (
-              <span className="flex">
-                <MdOutlineStarPurple500 className="text-xl mb-2" />
-                Add to Favourites
-              </span>
-            )}
-          </div>
+            </div>
+          ) : null}
         </div>
       </div>
       <div className="lg:h-[40vh]">

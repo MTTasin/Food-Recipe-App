@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { RxDropdownMenu } from "react-icons/rx";
 import { RecipeContext } from "../Context/Context";
 import { useParams } from "react-router-dom";
+import useFetch from "../useFetch";
 
 export default function NavBar() {
   const [activeLink, setActiveLink] = useState("home");
@@ -10,6 +11,15 @@ export default function NavBar() {
   const { searchParams, setSearchParams } = useContext(RecipeContext);
   const params = useParams();
   
+  
+  
+
+  const { response, error, loading } = useFetch(
+    `http://127.0.0.1:8000/favorites/`
+  );
+
+  const count = response?.length || 0;
+
   
 
   const navList = (
@@ -37,7 +47,8 @@ export default function NavBar() {
               : ""
           }
         >
-          Favourites
+          Favourites 
+          <span className="badge badge-secondary">{count}</span>
         </Link>
       </li>
     </ul>

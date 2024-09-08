@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .serializers import recipesSerializer
+from .serializers import recipesSerializer, favoritesSerializer
 from .models import recipes, favorites
 from rest_framework import viewsets
 from rest_framework.response import Response
@@ -41,6 +41,6 @@ class recipesViewSet(viewsets.ModelViewSet):
 
 
 class favoritesViewSet(viewsets.ModelViewSet):
-    serializer_class = recipesSerializer
+    serializer_class = favoritesSerializer
     queryset = favorites.objects.all()
     

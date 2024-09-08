@@ -21,7 +21,7 @@ class recipes(models.Model):
     
 
 class favorites(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
     ingredients = models.JSONField()
     instructions = models.JSONField()
     image = models.TextField()
