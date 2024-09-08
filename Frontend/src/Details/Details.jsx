@@ -31,7 +31,7 @@ export default function Details() {
 
 
   const { response, error, loading } = useFetch(
-    `https://dummyjson.com/recipes/${params.id}`
+    `http://127.0.0.1:8000/recipes/${params.id}`
   );
 
   useEffect(() => {

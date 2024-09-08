@@ -10,15 +10,23 @@ export default function Home() {
   const { searchParams, setSearchParams } = useContext(RecipeContext);
 
 
+  // const { response, error, loading } = useFetch(
+  //   searchParams
+  //     ? `https://dummyjson.com/recipes/search?q=${searchParams}`
+  //     : `https://dummyjson.com/recipes?limit=${limit}`
+  // );
+
   const { response, error, loading } = useFetch(
     searchParams
-      ? `https://dummyjson.com/recipes/search?q=${searchParams}`
-      : `https://dummyjson.com/recipes?limit=${limit}`
+      ? `http://127.0.0.1:8000/recipes/?name=${searchParams}`
+      : `http://127.0.0.1:8000/recipes/?limit=${limit}`
   );
+
+  console.log(response)
 
   useEffect(() => {
     if (response) {
-      setData(response.recipes);
+      setData(response);
     }
   }, [response]);
 

@@ -4,6 +4,7 @@ from .models import recipes, favorites
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.pagination import PageNumberPagination
 
 # Create your views here.
 
@@ -11,6 +12,7 @@ from rest_framework import status
 class recipesViewSet(viewsets.ModelViewSet):
     serializer_class = recipesSerializer
     queryset = recipes.objects.all()
+    pagination_class = PageNumberPagination
 
     def create(self, request, *args, **kwargs):
         if isinstance(request.data, list):
@@ -22,6 +24,18 @@ class recipesViewSet(viewsets.ModelViewSet):
         else:
             return super().create(request, *args, **kwargs)
         
+    # Dynamically set limit how many recipes to fetch
+    def get_queryset(self):
+        limit = self.request.query_params.get('limit')
+        name = self.request.query_params.get('name')
+        if limit:
+            return self.queryset.all()[:int(limit)]
+        elif name:
+            return self.queryset.filter(name__icontains=name)
+        else:
+            return self.queryset.all()
+    
+
     
     
 

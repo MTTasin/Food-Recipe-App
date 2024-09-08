@@ -53,7 +53,7 @@ export default function NavBar() {
             className="flex items-center normal-case text-lg"
           >
             <img src="/recipe.png" alt="" className="h-10 sm:h-10" />
-            <h1 className="text-xl font-bold">Recipe</h1>
+            
           </Link>
         </div>
         <div className="navbar-center">
